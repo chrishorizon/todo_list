@@ -8,6 +8,7 @@ function App() {
   const handleNewTodoSubmit = (event) => {
     event.preventDefault();
     setTodos([...todos, newTodo]) // spread operator takes an array on the right side of ... and separates it by individual items and put into a new array and , one last item added on the end
+    setNewTodo("");
   }
 
   return (
@@ -17,11 +18,21 @@ function App() {
       }}>
         <input onChange={(event) => {
           setNewTodo(event.target.value);
-        }} type="text" />
+        }}
+        type="text"
+        value={newTodo}
+        />
         <div>
           <button>Add</button>
         </div>
       </form>
+      {todos.map((todo, i) => {
+        return (
+          <div key={i}>
+            <span>{todo}</span>
+          </div>
+        );
+        })}
     </div>
   );
 }
