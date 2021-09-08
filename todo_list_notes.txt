@@ -1,0 +1,96 @@
+Notes - "Todo list"
+step 1 - We need to figure out what we need to keep track of in state, as yourself "what can change?"
+    - App.js -> import React, { useState } from "react"
+    - add all the items that change
+
+2 - Array destructure syntax for the todo input:
+    - For input box = const[newTodo, setNewTodo] = useState("")
+        - input box are strings by default so we set useState to an empty string.
+        - Above syntax is shorthand for the following 3 lines:
+        - const newTodoStateArr = useState("");
+        - const newTodo = newTodoStateArr[0];
+        - const setNewTodo = newTodoStateArr[1];
+
+    - useState always returns an array with 2 items in it
+    - ("") after state is the starting value of a state, telling it what we want the state to start out as.
+    - Always get back an array of 2 items:
+        First item is always the current value of the state, and starts off at the value you provide in the ("")
+        Second item -> Will update whenever you set the state to be a new value.
+
+3 - Make the HTML inputs in return.
+    - FORM = whenever we have a form we have an on submit event, and we're going to execute some function thats going to get a submit event onSubmit={(event) =>}
+    and we're going to execute some function ... => { handleNewTodoSubmit(event); }} and pass the event to that function.
+
+4 - Create the handleNewTodoSubmit function (above the return) - 
+    - First thing you always do when a form is submitted is prevent default behavior which is to refresh the page. 
+    const handleNewTodoSubmit = (event) => { event.preventDefault();}
+    - Also add a condition to prevent an empty input from being added
+        - if(newTodo == 0) { return; }
+    
+5 - When the submit happens it means something was typed into the input box, but we need to keep track of what gets put into the input box
+    - in order to keep track of that since it can change we need to keep track of our [newTodo]
+    - We use the onChange event - onChange={(event) => { setNewTodo(event.target.value);}}
+        - We setNewTodo and update it from its starting value of an empty string to whatever value is in the input box.
+     - The (.target.) of the event refers to the HTML element that triggered the event so it refers to the <input> that the onChange function is in.
+     - the (..value) stores the value of whatever is inside the input box.
+
+     Optional: style={{ textAlign: "center"}} on the main div to center text on screen.
+    
+6 - Add button on new div line
+
+7 - Do not mutate state directly with [todos] we are going to use [setTodos]
+    - We want to pass in a new array ([]) and in this new array we want it to contain all the old items with spread ... plus the [newTodo], see next line
+        - setNewTodo([...todos, newTodo])
+        - setNewTodo("") -> to clear the input box in the state after submitting value
+
+8 - 2 Way Data Binding -> clearing input box after we click add
+    - Add the value attribute to input box and connect it to the state, next line:
+        - value={newTodo} below the type="text onChange function
+
+9 - Display all the Todos:
+    Convert array of todos which is an array of strings into an array of HTML that displays each todo inside an HTML element
+    - Mapping: generate array based on another array 
+        todos.map wants a callback function (first arg, ), when it executes the function it gives us the current item thats being iterated over, and ( , second arg.) gives us the index of the item thats currently being iterated over.
+        - Then tell it to return a div, and a span inside the div so the text is not just sitting in a div.
+        - todos.map((todo, i) => { return <div> <spand> {todo} </span> </div> })
+        - Put a unique key={i} in the div of the todo span
+        
+    ** Everytime we click add, we are setting our todos to a new list (setTodos([...todos, newTodo]),
+       - when the state is updated it triggers the component to be rerendered which means function App(){ gets rendered again,
+       - and then when (const [todos, setTodos] = usetState([]) runs, its the current state, whatever the array currently is.
+       - So whenever the state changes, the function is re-executed, we get the current state and we re-render on to the page the todos.map() jsx. **
+    
+10 - Add button for delete:
+        - <button> Delete </button>
+        - We need an event listener to know when the button is clicked, event listener wants callback function
+            - onClick={(even) => { handleTodoDelete(); }}
+
+        - Function handleTodoDelete() doesn't exist yet so we are going to create it.
+            - const handleTodoDelete = (delIdx) => { }
+        - Use filter, it gives a new array with removed items. It wants a callback function to tell it what to do
+        - Filter callback function is going to loop over the array you are working with and give you the current item its looping over, and the current index. todos.filter((todo, i))
+            - const filteredTodos = todos.filter((todo, i) => {return i != delIdx })
+            - take my array and filter it into a new array
+        - Return i != delIdx
+
+        - Now that we have a new array from the filter, we can set our todos to that brand new array
+            - setTodos(filteredTodos)
+
+11 - Create a dictionary to keep track if the todo is complete,
+        - const todoItem = { text: newTodo, complete: false }
+    - Then we put the item in the array instead of just a string
+        - setTodos([...todos, todoItem])
+        so now when displaying our todos, its no longer a string, its an object with a todo.text where the text is, so now its an array of objects, key value pair dictionaries
+
+12 - Checkbox = Is an input box
+    - <input type="checkbox" />
+    We need to connect the state of the checkbox to our todos complete state {todo.text}
+    - use checked property and set it equal to the todos state
+        - checked = {todo.complete}
+    - We need to add the onChange to toggle the checkbox, pass the i in the parameters to know which todo is being completed,
+        - handleToggleComplete(i);
+    
+    - Create the function for handleToggleComplete()
+        - create a new array and want it to have all of the same items so we use map()
+
+13 - Strikethrough - added as a class

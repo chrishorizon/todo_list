@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import Todo from './components/Todo'
 import './App.css';
 
 function App() {
@@ -33,9 +34,8 @@ function App() {
   const handleToggleComplete = (idx) => {
     const updatedTodos = todos.map((todo, i) => {
       if(idx == i){
-        todo.complete = !todo.complete;
-        // const updatedTodo = {...todo, complete: !todo.complete};
-        // return updatedTodo;
+        const updatedTodo = {...todo, complete: !todo.complete};
+        return updatedTodo;
       }
       return todo;
     })
@@ -60,23 +60,9 @@ function App() {
         
         {/* Displaying input info */}
       {todos.map((todo, i) => {
-        return (
-          <div key={i}>
-            {/* Event listener for checkbox toggle function */}
-            <input onChange={(event) => {
-              handleToggleComplete(i);
-            }} checked={todo.complete} type="checkbox" />
-            <span>{todo.text}</span>
-            {/* Event listener for delete button */}
-            <button 
-              onClick={(event) => {
-              handleTodoDelete(i);
-            }}>
-              Delete
-            </button>
-          </div>
-        );
+        return <Todo key={i} i={i} todo={todo} handleToggleComplete={handleToggleComplete} handleTodoDelete={handleTodoDelete} />
         })}
+        
     </div>
   );
 }
